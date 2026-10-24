@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sangam 🎀✨</title>
+<style>
+:root{--pink:#ffd5e7;--purple:#9b73c9;--deep:#4d285e;--cream:#fff7fb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Arial,sans-serif;color:#fff;background:#3b214e}
+button{font:inherit;font-weight:900;letter-spacing:.3px;border:2px solid #fff8;border-radius:999px;padding:12px 24px;background:linear-gradient(135deg,#ffb9d9,#b998f5);color:#48234f;box-shadow:0 8px 24px #170b2840;cursor:pointer;transition:transform .2s,filter .2s}
+button:hover{transform:translateY(-2px) scale(1.02);filter:brightness(1.06)}
+button:active{transform:scale(.97)}
+.page{display:none;min-height:100vh;position:relative;padding:28px 16px 42px;overflow:hidden;background-size:cover;background-position:center;background-attachment:fixed}
+.page.active{display:block;animation:fadeIn .45s ease}
+.page:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#32163b9c,#4c275b88,#22142d99);pointer-events:none}
+.page>*{position:relative;z-index:1}
+.panel{width:min(900px,100%);margin:0 auto;padding:clamp(18px,4vw,34px);border:1px solid #ffffff70;border-radius:28px;background:#341d4a9c;box-shadow:0 18px 60px #17091d55;backdrop-filter:blur(7px);text-align:center}
+h1,h2,h3,p,.caption{font-weight:900;text-shadow:0 2px 8px #25102c80}
+h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.12;margin:8px 0 20px}
+h2{font-size:clamp(1.4rem,4vw,2.5rem)}
+p{font-size:clamp(1rem,2.7vw,1.18rem);line-height:1.75;white-space:pre-line}
+img{max-width:100%;height:auto}
+.hero-img{display:block;width:min(360px,88%);max-height:460px;object-fit:contain;margin:18px auto;border-radius:22px;box-shadow:0 12px 35px #10071970}
+.small-img{width:min(300px,84%);max-height:360px;object-fit:contain;border-radius:20px;margin:12px auto;box-shadow:0 10px 30px #16091d70}
+.btnrow{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:22px}
+.note{font-size:.95rem;opacity:.95}
+.keypad{display:grid;grid-template-columns:repeat(3,minmax(58px,82px));gap:10px;justify-content:center;margin:22px auto}
+.keypad button{padding:16px 10px;font-size:1.25rem}
+.password-dots{font-size:2rem;letter-spacing:10px;min-height:42px;margin:12px}
+.error{color:#ffe0eb}
+.letter{text-align:left;background:#fff7fc;color:#522b58;text-shadow:none;border-radius:22px;padding:clamp(18px,4vw,34px);line-height:1.85;white-space:pre-line;box-shadow:0 12px 35px #10071950}
+.letter h2,.letter h3,.letter p{color:#522b58;text-shadow:none}
+.letter p{font-weight:600}
+.photo-story{display:flex;flex-direction:column;gap:26px;margin:28px auto;max-width:1000px}
+.story-item{display:flex;align-items:center;gap:20px;padding:16px;border-radius:24px;background:#341d4aab;border:1px solid #ffffff70}
+.story-item.left{flex-direction:row}
+.story-item.right{flex-direction:row-reverse}
+.story-item img{width:min(42%,300px);max-height:370px;object-fit:contain;border-radius:18px}
+.caption{flex:1;white-space:pre-line;line-height:1.75;font-size:clamp(1rem,2.7vw,1.15rem)}
+.heart-mosaic{width:min(460px,94%);margin:22px auto;aspect-ratio:11/10;display:grid;grid-template-columns:repeat(11,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:0;overflow:hidden;}
+.heart-mosaic img{display:block;width:100%;height:100%;object-fit:cover;min-width:0;min-height:0;border:0;border-radius:0;margin:0;padding:0;}
+
+
+.garden{padding:24px 0}
+.garden-heart{font-size:clamp(5rem,22vw,12rem);line-height:1;filter:drop-shadow(0 0 20px #ff5da9);animation:beat 1s infinite}
+.float-hearts{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+.float-hearts span{position:absolute;bottom:-50px;animation:floatUp 9s linear infinite;opacity:.65}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+@keyframes floatUp{to{transform:translateY(-115vh) rotate(35deg);opacity:0}}
+@media(max-width:650px){.page{padding:18px 10px 30px;background-attachment:scroll}.panel{padding:18px 13px;border-radius:22px}.story-item,.story-item.right,.story-item.left{flex-direction:column}.story-item img{width:min(100%,330px);max-height:390px}.caption{text-align:center}.heart-mosaic{width:min(360px,96%);grid-template-columns:repeat(11,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:0;padding:0}}
+
+/* Interface 4: supplied dreamy pink heart / arrow / birthday / garden style */
+.mini-scene{display:none;min-height:80vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px 8px;color:#85435f}
+.mini-scene:not([hidden]){display:flex;animation:fadeIn .6s ease both}
+.mini-kicker{font-size:10px;letter-spacing:3px;color:#b76b89;line-height:1.8}
+.mini-script{font-family:"Dancing Script","Trebuchet MS",cursive;font-size:clamp(2.2rem,8vw,3.3rem);color:#95516f;margin:8px}
+.mini-subtitle,.mini-note{font-size:12px;color:#ad7d91}
+.mini-heart-stage{position:relative;display:grid;place-items:center;width:min(100%,480px);height:clamp(300px,55vh,440px);overflow:hidden}
+.mini-halo{position:absolute;width:min(80vw,360px);height:min(80vw,360px);border-radius:50%;background:#ff4f98;filter:blur(65px);opacity:.5;animation:miniHalo 1.8s ease-in-out infinite}
+.mini-heart{position:relative;z-index:2;font-size:clamp(230px,70vw,390px);line-height:1;color:#ff4f91;filter:drop-shadow(0 0 25px #ff4f98cc);animation:miniBeat 1.3s ease-in-out infinite}
+.mini-heart.hit{animation:miniHit .65s ease-in forwards}
+.mini-arrow{position:absolute;z-index:3;left:-150px;top:50%;font-size:clamp(90px,24vw,145px);opacity:0;transform:translateY(-50%) rotate(12deg)}
+.mini-arrow.fly{animation:miniStrike .78s ease forwards}
+.mini-impact{position:absolute;left:50%;top:50%;width:20px;height:20px;border:3px solid #ff589b;border-radius:50%;opacity:0;transform:translate(-50%,-50%)}
+.mini-impact.show{animation:miniBurst .6s ease-out forwards}
+#p4 .mini-scene button{background:linear-gradient(135deg,#fff0f6,#ffc2da);color:#873552;border-color:#ef9dbb}
+.mini-birthday-title{font-family:Georgia,serif;font-size:clamp(2.5rem,10vw,4.5rem);color:#fff8fc;text-shadow:0 4px 20px #b62e6724}
+.mini-birthday-title span{font-weight:900}
+.mini-sparkle{font-size:48px;animation:miniSparkle 1.8s infinite}
+.mini-gold-line{width:130px;height:2px;background:linear-gradient(90deg,transparent,#fff0c7,transparent);margin:15px}
+.mini-birthday-message{max-width:330px;font-size:13px;line-height:1.9;color:#fff4f8}
+#sceneBirthday{background:radial-gradient(ellipse at center,#ff9fc4 0%,transparent 58%),linear-gradient(145deg,#f9a3c1,#ef699c 56%,#d9528d);border-radius:24px}
+.mini-garden{position:relative;width:min(100%,470px);height:420px;overflow:hidden;border-radius:22px;background:linear-gradient(#fff8fb,#ffebf3);box-shadow:0 10px 35px #d46b9610}
+.mini-ground{position:absolute;bottom:-25px;left:-10%;width:120%;height:70px;border-radius:50%;background:#edc1d0}
+.mini-trunk{position:absolute;left:calc(50% - 10px);bottom:10px;width:20px;height:180px;border-radius:60% 50% 10% 10%;background:linear-gradient(90deg,#885c64,#b58183,#8d6068)}
+.mini-branch{position:absolute;height:8px;border-radius:99px;background:#b58183;transform-origin:left center}
+.mini-branch.b1{width:140px;left:50%;bottom:130px;transform:rotate(-145deg)}.mini-branch.b2{width:145px;left:50%;bottom:130px;transform:rotate(-35deg)}.mini-branch.b3{width:110px;left:50%;bottom:175px;transform:rotate(-105deg)}.mini-branch.b4{width:100px;left:42%;bottom:185px;transform:rotate(-155deg)}.mini-branch.b5{width:105px;left:58%;bottom:185px;transform:rotate(-20deg)}.mini-branch.b6{width:85px;left:50%;bottom:205px;transform:rotate(-90deg)}
+.mini-blossom{position:absolute;transform:translate(-50%,-50%);font-size:var(--sz,17px);color:var(--c,#ff4f91);text-shadow:0 0 10px currentColor;animation:miniBlink 1.7s ease-in-out infinite alternate}
+.mini-letter{width:min(100%,430px);margin:22px 0;padding:22px 20px;text-align:left;border:1px solid #f4c2d5;border-radius:20px;background:#ffffffd9;color:#795164;line-height:1.9}
+.mini-letter h2{font-family:"Dancing Script",cursive;font-size:33px;color:#a74e75}.mini-letter p{font-size:12px;color:#795164;text-shadow:none}.mini-signature{text-align:right;font-family:"Dancing Script",cursive!important;font-size:23px!important}
+@keyframes miniHalo{50%{transform:scale(1.2);opacity:.8}}@keyframes miniBeat{35%{transform:scale(1.1)}60%{transform:scale(1.03)}78%{transform:scale(1.13)}}@keyframes miniHit{to{transform:scale(0);opacity:0}}@keyframes miniStrike{10%{opacity:1}80%{left:calc(50% - 70px);opacity:1}100%{left:calc(50% - 60px);opacity:0}}@keyframes miniBurst{to{opacity:0;transform:translate(-50%,-50%) scale(9)}}@keyframes miniSparkle{50%{transform:rotate(12deg) scale(1.15)}}@keyframes miniBlink{to{filter:brightness(1.8);text-shadow:0 0 18px currentColor}}
+
+</style>
+</head>
+<body>
+<div class="float-hearts" id="floatHearts"></div>
+
+<!-- INTERFACE 1: PASSWORD -->
+<section class="page active" id="p1" data-bg="6.images/IMG_c54030e2-ca78-462f-8daa-24180c41fbba.jpg">
+  <div class="panel" id="lockScreen">
+    <h1>Enter a password 🔑..!!</h1>
+    <img class="hero-img" data-img="2.images/Picsart_26-10-23_23-27-40-697.jpg" alt="Password hint">
+    <h2>Chalo Socho Kya Hoga password 🔑🧐..?</h2>
+    <div class="password-dots" id="dots" aria-live="polite">○ ○ ○ ○</div>
+    <div class="keypad" id="keypad"></div>
+    <div class="btnrow"><button onclick="clearPassword()">Clear</button><button onclick="checkPassword()">Enter 💗</button></div>
+    <p class="note">A little surprise is waiting for you ✨</p>
+  </div>
+  <div class="panel" id="wrongScreen" hidden>
+    <h1 class="error">wrong password 🔑</h1>
+    <img class="hero-img" data-img="5.images/Picsart_26-10-24_09-16-34-504.jpg" alt="Wrong password">
+    <div class="btnrow"><button onclick="resetLock()">Try Again 💗</button></div>
+  </div>
+</section>
+
+<!-- INTERFACE 2: YES/NO -->
+<section class="page" id="p2" data-bg="6.images/IMG_0e875bbc-ae77-4ed7-b2f5-bde4a97aba7b.jpg">
+  <div class="panel" id="question0">
+    <h1>I made something special for uhh do uhh wanna see it 👀..!!</h1>
+    <img class="hero-img" data-img="4.images/Picsart_26-10-24_10-23-29-443.png" alt="A special surprise">
+    <div class="btnrow"><button onclick="go(3)">Yes 💗</button><button onclick="showQuestion(1)">No 🙈</button></div>
+  </div>
+  <div class="panel" id="question1" hidden>
+    <h1>Did you really not want to see 🥹👀</h1>
+    <img class="hero-img" data-img="4.images/Picsart_26-10-24_10-23-11-607.png" alt="">
+    <div class="btnrow"><button onclick="showQuestion(2)">Yes 💗</button><button onclick="showQuestion(0)">No 🙈</button></div>
+  </div>
+  <div class="panel" id="question2" hidden>
+    <h1>Are you sure..!!</h1>
+    <img class="hero-img" data-img="4.images/Picsart_26-10-24_10-22-42-645.png" alt="">
+    <div class="btnrow"><button onclick="showQuestion(3)">Yes 💗</button><button onclick="showQuestion(0)">No 🙈</button></div>
+  </div>
+  <div class="panel" id="question3" hidden>
+    <h1>Really..!!</h1>
+    <img class="hero-img" data-img="4.images/Picsart_26-10-24_09-20-24-120.png" alt="">
+    <div class="btnrow"><button onclick="showQuestion(4)">Yes 💗</button><button onclick="showQuestion(0)">No 🙈</button></div>
+  </div>
+  <div class="panel" id="question4" hidden>
+    <h1>confirm</h1>
+    <img class="hero-img" data-img="4.images/Picsart_26-10-24_09-19-51-521.png" alt="">
+    <div class="btnrow"><button onclick="showQuestion(5)">Yes 💗</button><button onclick="showQuestion(5)">No 🙈</button></div>
+  </div>
+  <div class="panel" id="question5" hidden>
+    <h1>How dare you..!!</h1>
+    <img class="hero-img" data-img="6.images/dudu-heating-bubu-angry-dudu.gif" alt="Angry Dudu and Bubu">
+    <p>piyar se bolu to samajh nahi aata aap ko ..?</p>
+    <div class="btnrow"><button onclick="showQuestion(0)">Go back 💗</button></div>
+  </div>
+</section>
+
+<!-- INTERFACE 3 -->
+<section class="page" id="p3" data-bg="6.images/IMG_0e875bbc-ae77-4ed7-b2f5-bde4a97aba7b.jpg">
+  <div class="panel">
+    <h1>Yay! I know you'd say Yes !</h1>
+    <p>your are the most amazing person I know. I love uhh endlessly ✨🤍🪷</p>
+    <img class="hero-img" data-img="6.images/IMG_e50f3926-d651-4f1c-ac5f-b78ad75171f5.gif" alt="Cute animated surprise">
+    <div class="btnrow"><button onclick="go(4)">Next 💗</button></div>
+  </div>
+</section>
+
+<!-- INTERFACE 4: ORIGINAL HEART-ARROW / BIRTHDAY / GARDEN EXPERIENCE -->
+<section class="page" id="p4" data-bg="6.images/IMG_d846d2ba-68c8-4908-b11c-23d8dc4134ce.jpg">
+  <div class="mini-scene active" id="sceneIntro">
+    <p class="mini-kicker">A LITTLE SOMETHING, FOR YOU</p>
+    <h1 class="mini-script">Made with love ♡</h1>
+    <p class="mini-subtitle">A tiny surprise, just for you...</p>
+    <div class="mini-heart-stage">
+      <div class="mini-halo"></div>
+      <div class="mini-heart" id="miniHeart">♥</div>
+      <div class="mini-arrow" id="miniArrow">➶</div>
+      <div class="mini-impact" id="miniImpact"></div>
+    </div>
+    <button onclick="strikeMiniHeart()" id="miniPull"><span>➶</span> PULL &amp; RELEASE</button>
+    <p class="mini-note" id="miniNote">Tap to release a little love 💌</p>
+  </div>
+  <div class="mini-scene" id="sceneBirthday" hidden>
+    <p class="mini-kicker">A SPECIAL DAY FOR SOMEONE SPECIAL</p>
+    <p class="mini-script">make a wish...</p>
+    <div class="mini-sparkle">✧ 🎂 ✧</div>
+    <h1 class="mini-birthday-title">Happy Birthday,<br><span>Sangam!</span></h1>
+    <div class="mini-gold-line"></div>
+    <p class="mini-birthday-message">May your world be filled with love, little joys, beautiful dreams and endless reasons to smile. ♡</p>
+    <button onclick="showScene('garden')">OPEN YOUR SURPRISE ♡</button>
+  </div>
+  <div class="mini-scene" id="sceneGarden" hidden>
+    <p class="mini-kicker">A LITTLE GARDEN, JUST FOR YOU</p>
+    <h1 class="mini-script">For you, Sangam ♡</h1>
+    <p class="mini-subtitle">Every little heart is a reason I adore you.</p>
+    <div class="mini-garden">
+      <div class="mini-ground"></div><div class="mini-trunk"></div>
+      <div class="mini-branch b1"></div><div class="mini-branch b2"></div><div class="mini-branch b3"></div>
+      <div class="mini-branch b4"></div><div class="mini-branch b5"></div><div class="mini-branch b6"></div>
+      <div id="miniBlossoms"></div>
+    </div>
+    <article class="mini-letter">
+      <p class="mini-kicker">♡ A LETTER FROM MY HEART ♡</p>
+      <h2>Dear Sangam,</h2>
+      <p>Happy Birthday, my love. 💗 I wish I could be right beside you today, making you smile and reminding you how special you are to me.</p>
+      <p>May every dream you hold close come a little nearer, and may your days be filled with peace, happiness, laughter and love. Even the smallest moments become beautiful when they remind me of you.</p>
+      <p>If I could give you one thing, it would be the ability to see yourself through my eyes, so you could understand just how precious you are to me.</p>
+      <p class="mini-signature">Always yours,<br>anny ♡</p>
+    </article>
+    <div class="btnrow"><button onclick="showScene('intro')">WATCH IT AGAIN ↻</button><button onclick="go(5)">Next 💗</button></div>
+  </div>
+</section>
+
+<!-- INTERFACE 5: HEART-TOUCHING WORDS -->
+<section class="page" id="p5" data-bg="6.images/IMG_c54030e2-ca78-462f-8daa-24180c41fbba.jpg">
+  <div class="panel">
+    <h1>some heart touching words for uhhh</h1>
+    <div class="photo-story">
+      <article class="story-item right"><img data-img="2.images/file_0000000043dc821196879f28712bec19.png" alt=""><div class="caption">In English we say , you look beautiful in every outfit but I Urdu :- Chand 🌛 si Roshan he jiski aakhe 👀 aadaye khash rakhti he 🤭 har liwaj jajta he uspe 🫀🌸 har rang me Kamal lagti he 🥹🤌..</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_10-20-18-238.png" alt=""><div class="caption">" ki mujhe Fursat kaha me najara dekhu 👀🌸
+Ki mujhe Fursat kaha me najara dekhu 👀🎀
+Tum se najar hate to jaman dekhu .. 🫀👀🫣</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-20-36-948.png" alt=""><div class="caption">" Ki Bhagwan ne banaya he Tumhe puri kaynath ki nur se, ki Bhagwan ne banaya he Tumhe puri kaynath ki nur se 🫀💕
+Ki fariste vi guman karte he aap ko dekh kar dur se 🤍🍀
+Aur ab aap hi batao me kaise man lu aap Kam ho Kisi hoor se ✨🪷...</div></article>
+      <article class="story-item left"><img data-img="2.images/file_0000000040c4821195d18b6028d9020c.png" alt=""><div class="caption">ki baat batane ki nahi he Tum phir vi batane dogi kya .. 🤌
+Ki baat batane ki nahi Tum phir vi batane dogi kya... 🤌
+Ishq ho gya he Tum se jatane dogi kya 😝
+Ki Tum nadi, Tum pahad, Tum aasman ho Mera 🫂🌸🥺
+Ek dibya rakhi he mene sindoor ki Tum lagane dogi kya 🤌🥹🎀</div></article>
+      <article class="story-item right"><img data-img="2.images/file_000000000a488211ab492b30bc0f3a71.png" alt=""><div class="caption">" seeing you win is also part 〽️ of my dream 💗☺️..</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_10-20-59-257.png" alt=""><div class="caption">" may god bless you with more than you deserve better than you expected and sooner than you imagined... ☺️🙏💟</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-21-17-805.png" alt=""><div class="caption">" I the most selfish corner of my heart 🫀🌸, I still wish no one ever look at you the way I do 😭👀🎀</div></article>
+      <article class="story-item right"><img data-img="2.images/Picsart_26-10-24_10-43-07-279.png" alt=""><div class="caption">" Yar Kate Sundar xe tu 🥹🤌 hmra pass words nai bachai ya tora lagi .... 👀🎀</div></article>
+      <article class="story-item left"><img data-img="2.images/Picsart_26-10-24_10-42-39-006.png" alt=""><div class="caption">" Dekh ham Sach me fine mara ke suru kar debau 🥹🤌 aab je aur Sundar vele ta ... 😝🤭</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-21-41-308.png" alt=""><div class="caption">Suno aab Tum khud se kux kux tarif kar dena pic me vej Raha hu har pic ko mene bataya he usi sequence me rakha aur tarif khud se generate karo</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_20-49-03-623.png" alt=""><div class="caption">Tumhari smile mein ek alag si roshni hai, jaise din kitna bhi ordinary ho, tum use special bana do. 🥹🎀✨</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-23-58-801.png" alt=""><div class="caption">Tumhari aankhon mein itni masoomiyat hai ki bas dekhte rehne ka mann karta hai. 👀🫶🌸</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_10-21-55-238.png" alt=""><div class="caption">Tum sirf sundar nahi, tumhari presence hi dil ko sukoon de deti hai. 🤍🪷</div></article>
+      <article class="story-item right"><img data-img="2.images/Picsart_26-10-23_23-27-40-697.jpg" alt=""><div class="caption">Meri cute si princess, tumhari har ada mein apna hi ek magic hai. 👑💗</div></article>
+      <article class="story-item left"><img data-img="2.images/Picsart_26-10-24_10-41-02-409.png" alt=""><div class="caption">Tumhari simplicity hi tumhari sabse pyari baat hai—bilkul natural, bilkul special. 🎀🌷</div></article>
+      <article class="story-item right"><img data-img="2.images/Picsart_26-10-24_10-41-53-043.png" alt=""><div class="caption">Aise hi haste rehna, Motu. Tumhari khushi meri favourite sights mein se ek hai. 🧸💞</div></article>
+    </div>
+    <div class="btnrow"><button onclick="go(6)">Next 💗</button></div>
+    <p>I love uhh more than everything 👀🥺 and I will never ever leave you alone in every situation... 💗🫂🤍</p>
+  </div>
+</section>
+
+<!-- INTERFACE 6: SURPRISE AND LETTER -->
+<section class="page" id="p6" data-bg="6.images/IMG_0e875bbc-ae77-4ed7-b2f5-bde4a97aba7b.jpg">
+  <div class="panel" id="surpriseHome">
+    <h1>your surprise 🌸✨🪷</h1>
+    <img class="hero-img" data-img="3.images/Picsart_26-10-24_20-49-03-623.png" alt="Your surprise">
+    <div class="btnrow"><button onclick="show6('letterPage')">Open Me 💌</button></div>
+  </div>
+  <div class="panel" id="letterPage" hidden>
+    <div class="letter">
+      <h1>🎂🎀❤️‍🩹 HAPPY BIRTHDAY, MY SANGAM ❤️‍🩹🎀</h1>
+      <h2>🌙💕 To My Little Princess 👑✨, My Motu 🧸💗, My Forever Love ♾️❤️</h2>
+      <p>Happy Birthday, my sweetest Sangam! 🎂🎉🎀❤️‍🩹
+
+Today is all about you, the beautiful person who makes my world brighter just by being in it. I wish I could put into words every little thing that makes you special to me, but even a thousand pages would never be enough to explain how much you mean to my heart. 🥹💗
+
+🌸💗 My Sangam, Do You Know How Special You Are to Me? 🥹❤️
+
+You are more than just someone I love. You are my comfort, my happiness, my favourite thought, and one of the most precious parts of my life. Your smile can make a difficult day feel lighter, and even the smallest moments with you become memories I want to keep forever. I hope you always see the beauty in yourself that I see in you. 🎀✨
+
+🎂👑 My Little Princess, Today Is All About You! 🎀✨
+
+My princess, today I wish you endless smiles, peaceful mornings, beautiful surprises, and all the little things that make your heart happy. May every dream you carry come closer to you, and may you always find the courage to chase the life you want. You deserve to feel celebrated, loved, appreciated, and cherished—not only today, but every day. 👑🌷
+
+❤️‍🩹🥹 Sangam, If You Ever Feel Tired of Being Strong...
+
+Please remember that you do not have to be strong every second. You are allowed to rest, to cry, to take your time, and to ask for comfort. I hope you never feel that you have to hide your worries or pretend everything is okay. Your feelings matter, your dreams matter, and you matter more than you sometimes realise. 🫂🤍
+
+🌙🧸 Motu, Your Smile Is One of My Favorite Things 💕✨
+
+My cute Motu, never stop smiling that beautiful smile of yours. Your laugh, your little habits, your expressions, and all the tiny things that make you *you* are so precious to me. I hope life gives you a million reasons to smile and people who protect that happiness with kindness. 🧸💗
+
+💌❤️ Sangam, Here Is What I Truly Want for Us ♾️💗
+
+I want us to keep choosing kindness, honesty, patience, and understanding. I want to celebrate your wins, encourage you when things feel difficult, and remind you that you are capable of wonderful things. I hope we keep making sweet memories, sharing silly moments, cheering each other on, and growing into better versions of ourselves. I want our connection to feel safe, sincere, and full of care. 🫶🌸
+
+🎀👑 A Birthday Wish for My Beautiful Princess ✨🌸
+
+May God bless you with more happiness than you can imagine, more love than you expect, good health, peaceful days, success in your goals, and the strength to overcome every challenge. May the right opportunities find you, may your hard work pay off, and may your kind heart always be surrounded by goodness. 🙏💟
+
+🧸🌙 Motu, Never Forget How Much You Deserve to Be Happy 💗
+
+Never settle for thinking you are not enough. You are worthy of respect, gentle love, good friendships, beautiful opportunities, and a future you feel proud of. Keep learning, keep growing, and keep believing in yourself even on days when confidence feels far away. I will always wish for your happiness and your success. 🌷🦋
+
+💌💗 Sangam, If I Could Give You One Gift Beyond All the Others...
+
+I would give you the ability to see yourself through the eyes of the people who truly care about you. I would let you see how your smile brightens a room, how your presence makes moments memorable, and how your dreams deserve to be taken seriously. I would want you to recognise just how lovable, capable, and wonderfully unique you are. 🥹💖
+
+🎂🌷 My Final Birthday Wish for You, Sangam ❤️‍🩹🎀
+
+On your birthday, I wish you a life filled with genuine love, laughter that comes from your heart, memories you will treasure, and dreams that slowly become reality. May you always have a reason to hope, someone to listen, somewhere to feel at home, and the courage to begin again whenever you need to.
+
+With all my love,
+Your person, who wishes nothing but beautiful things for you. ❤️‍🩹🎀💋
+
+🌷🎂 HAPPY BIRTHDAY, SANGAM! 🎂🌷
+👑✨ HAPPY BIRTHDAY, MY LITTLE PRINCESS! ✨👑
+🧸🌙 HAPPY BIRTHDAY, MY MOTU! 🌙🧸
+💗🦋 KEEP SMILING, KEEP SHINING, KEEP DREAMING, AND NEVER STOP BELIEVING IN YOURSELF. 🦋💗
+🎀❤️‍🩹 YOU DESERVE A BEAUTIFUL LIFE, TODAY AND EVERY DAY AFTER THIS. ❤️‍🩹🎀</p>
+    </div>
+    <img class="hero-img" data-img="6.images/unnamed.webp" alt="A little birthday keepsake">
+    <div class="btnrow"><button onclick="show6('mosaicPage')">Open Me 💗</button><button onclick="show6('surpriseHome')">Back</button></div>
+  </div>
+  <div class="panel" id="mosaicPage" hidden>
+    <h1>All our little memories, together 💗</h1>
+    <div class="heart-mosaic" id="heartMosaic"></div>
+    <img class="hero-img" data-img="5.images/Picsart_26-10-24_09-17-22-132.png" alt="Growing up memories">
+    <div class="btnrow"><button onclick="show6('childhoodPage')">see your grow up 🌸</button><button onclick="show6('letterPage')">Back</button></div>
+  </div>
+  <div class="panel" id="childhoodPage" hidden>
+    <h1>My cute little baby 🥹🎀</h1>
+    <div class="photo-story">
+      <article class="story-item left"><img data-img="2.images/file_00000000238072069215fdf14bf92d99.png" alt=""><div class="caption">🤍🌸 pata xau tu ne aabhy se 10× Jada cute baccha me lagi xe 🪷✨🥹,
+HYeeee hme piyara baccha 🥺🌸😚</div></article>
+      <article class="story-item right"><img data-img="2.images/file_00000000f2ec7206b55a870690602104.png" alt=""><div class="caption">Awwww 🥹 Kya huwa mere bacche ko Kya dekh Raha he ..?</div></article>
+      <article class="story-item left"><img data-img="images/73e17beb752c4e699419e9c51e609ec2.webp" alt=""><div class="caption">This is my favorite one 🥹🤌🎀</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-21-55-238.png" alt=""><div class="caption">Itni si cutie, aur itni saari cuteness! 🥹🎀</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_10-21-17-805.png" alt=""><div class="caption">Tumhari har photo mein ek alag hi pyari si vibe hai. 💗</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-20-59-257.png" alt=""><div class="caption">Chhoti si tum, par dil mein bahut saari jagah banane wali. 🌸</div></article>
+      <article class="story-item left"><img data-img="3.images/Picsart_26-10-24_10-20-36-948.png" alt=""><div class="caption">Cute tab bhi, cute ab bhi, aur hamesha meri favourite. 🫂🎀</div></article>
+      <article class="story-item right"><img data-img="3.images/Picsart_26-10-24_10-20-18-238.png" alt=""><div class="caption">A little memory, a lot of love. 🤍🪷</div></article>
+    </div>
+    <img class="hero-img" data-img="7.image/Picsart_26-10-24_20-49-03-623.png" alt="A little extra surprise">
+    <div class="btnrow"><button onclick="show6('forYouPage')">Press Me 💗</button><button onclick="show6('mosaicPage')">Back</button></div>
+  </div>
+  <div class="panel" id="forYouPage" hidden>
+    <h1>For uhh 🌸🎀</h1>
+    <img class="hero-img" data-img="7.image/Picsart_26-10-24_23-36-19-602.png" alt="For you">
+    <img class="hero-img" data-img="7.image/Picsart_26-10-24_23-36-32-693.png" alt="A little garden gift">
+    <p>wiase to Tum Pura garden deserve karti ho par filhal isy se Kam Chala lo ..!!
+🤭😝🪷🫂💗</p>
+    <div class="btnrow"><button onclick="show6('childhoodPage')">Back 💗</button></div>
+  </div>
+  <div class="btnrow" style="margin-top:30px"><button onclick="restartSite()">Restart ↻</button></div>
+</section>
+
+<script>
+const REPO='https://raw.githubusercontent.com/yadavjosh62-svg/Birthday---special-/main/';
+function asset(path){return REPO+path.split('/').map(encodeURIComponent).join('/')}
+document.querySelectorAll('[data-img]').forEach(img=>{img.src=asset(img.dataset.img);img.onerror=()=>{img.alt='Image not found: '+img.dataset.img;img.style.minHeight='80px';img.style.background='#ffffff22'}});
+document.querySelectorAll('.page').forEach(p=>p.style.backgroundImage=`url("${asset(p.dataset.bg)}")`);
+const nums=['1','2','3','4','5','6','7','8','9','0'];let password='';
+const keypad=document.getElementById('keypad');
+nums.forEach(n=>{const b=document.createElement('button');b.textContent=n;b.setAttribute('aria-label','Number '+n);b.onclick=()=>{if(password.length<4){password+=n;updateDots()}};keypad.appendChild(b)});
+function updateDots(){document.getElementById('dots').textContent=password?('● '.repeat(password.length)+'○ '.repeat(4-password.length)).trim():'○ ○ ○ ○'}
+function clearPassword(){password='';updateDots()}
+function checkPassword(){if(password==='0806'){go(2);clearPassword()}else{document.getElementById('lockScreen').hidden=true;document.getElementById('wrongScreen').hidden=false;clearPassword()}}
+function resetLock(){document.getElementById('wrongScreen').hidden=true;document.getElementById('lockScreen').hidden=false;clearPassword()}
+function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p'+n).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(n===4)showScene('intro');if(n===2)showQuestion(0);if(n===6)show6('surpriseHome')}
+function showQuestion(n){document.querySelectorAll('#p2 .panel').forEach(p=>p.hidden=true);document.getElementById('question'+n).hidden=false}
+function showScene(name){['Intro','Birthday','Garden'].forEach(s=>document.getElementById('scene'+s).hidden=true);document.getElementById('scene'+name[0].toUpperCase()+name.slice(1)).hidden=false}
+function show6(id){['surpriseHome','letterPage','mosaicPage','childhoodPage','forYouPage'].forEach(x=>document.getElementById(x).hidden=true);document.getElementById(id).hidden=false;window.scrollTo({top:0,behavior:'smooth'})}
+function restartSite(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p1').classList.add('active');document.getElementById('lockScreen').hidden=false;document.getElementById('wrongScreen').hidden=true;clearPassword();showQuestion(0);showScene('intro');show6('surpriseHome');window.scrollTo({top:0,behavior:'smooth'})}
+const mosaicFiles=[
+'images/1741243030980.jpg','images/528f3986dd1e45df9762d6b01abfd60e.webp','images/715a081d5c254df2964c4c872a129147.webp','images/73e17beb752c4e699419e9c51e609ec2.webp',
+'images/IMG-20260919-WA0011.jpg','images/IMG-20260919-WA0016.jpg','images/IMG_20250307_165255_224.jpg','images/IMG_20260125_171635_396.jpg',
+'images/IMG_20260125_171632_783.jpg','images/IMG_20260128_210042_935.jpg','images/IMG_20260413_031523_878.jpg','images/IMG_20260520_130619_501.jpg',
+'images/IMG_20260520_130654_198.jpg','images/IMG_20260709_093119_609.jpg','images/IMG_20260711_124410_351.jpg','images/IMG_20260717_225954_215.jpg',
+'images/IMG_20260717_230311_339.jpg','images/IMG_20260801_121248_476.jpg','images/IMG_20260805_230728_018.jpg','images/IMG_20260816_114848_177.jpg',
+'images/IMG_20260816_124512_517.jpg','images/IMG_20260816_124550_130.jpg','images/IMG_20260816_124553_535.jpg','images/IMG_20260822_165120_124.jpg',
+'images/IMG_20260829_122943_095.jpg','images/IMG_20260830_144044_953.jpg','images/IMG_20260830_144006_940.jpg','images/IMG_20260829_135201_812.jpg',
+'images/IMG_20260830_144006_713.jpg','images/IMG_20260829_135201_413.jpg','images/IMG_20260904_233154_714.jpg','images/IMG_20260904_233152_599.jpg',
+'images/IMG_20260830_144115_229.jpg','images/IMG_20260830_144105_043.jpg','images/IMG_20260830_144057_459.jpg','images/file_00000000f2ec7206b55a870690602104.png',
+'images/da5cbd1dea7f4a8c90d16047ad8c78d4.webp','images/file_00000000238072069215fdf14bf92d99.png'
+];
+const heart=document.getElementById('heartMosaic');
+// Row-by-row tile positions form a compact heart. Images repeat if needed, so there are no holes.
+const heartRows=[[2,3,7,8],[1,2,3,4,6,7,8,9],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9],[2,3,4,5,6,7,8],[3,4,5,6,7],[4,5,6],[5]];
+heart.style.gridTemplateRows='repeat(10,minmax(0,1fr))';
+heart.style.gridTemplateColumns='repeat(11,minmax(0,1fr))';
+const heartPool=mosaicFiles.slice();
+for(let r=0;r<heartRows.length;r++){
+  for(const c of heartRows[r]){
+    const f=heartPool[Math.floor(Math.random()*heartPool.length)];
+    const im=document.createElement('img');
+    im.src=asset(f);im.alt='Memory';im.loading='lazy';
+    im.style.gridRow=String(r+1);im.style.gridColumn=String(c+1);
+    im.onerror=()=>{im.style.visibility='hidden'};
+    heart.appendChild(im);
+  }
+}
+for(let i=0;i<18;i++){const s=document.createElement('span');s.textContent=['💗','💕','🌸','✨','💖'][i%5];s.style.left=(Math.random()*100)+'%';s.style.animationDelay=(Math.random()*9)+'s';s.style.fontSize=(14+Math.random()*18)+'px';document.getElementById('floatHearts').appendChild(s)}
+
+let miniBusy=false;
+function strikeMiniHeart(){
+  if(miniBusy)return; miniBusy=true;
+  const a=document.getElementById('miniArrow'),h=document.getElementById('miniHeart'),i=document.getElementById('miniImpact'),b=document.getElementById('miniPull');
+  b.disabled=true;b.textContent='♡ SENDING LOVE...';document.getElementById('miniNote').textContent='A little love is on its way...';
+  a.classList.remove('fly');h.classList.remove('hit');i.classList.remove('show');void a.offsetWidth;a.classList.add('fly');
+  setTimeout(()=>{i.classList.add('show');h.classList.add('hit')},620);
+  setTimeout(()=>{showScene('birthday');miniBusy=false;b.disabled=false;b.innerHTML='<span>➶</span> PULL &amp; RELEASE';a.classList.remove('fly');h.classList.remove('hit');i.classList.remove('show');document.getElementById('miniNote').textContent='Tap to release a little love 💌'},1350);
+}
+function showScene(name){
+  ['intro','birthday','garden'].forEach(s=>document.getElementById('scene'+s[0].toUpperCase()+s.slice(1)).hidden=true);
+  document.getElementById('scene'+name[0].toUpperCase()+name.slice(1)).hidden=false;
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='garden')createMiniBlossoms();
+}
+function createMiniBlossoms(){
+ const box=document.getElementById('miniBlossoms');if(box.children.length)return;
+ const colors=['#ff4f91','#ff8db8','#ffb4d1','#ed568c','#d5a1f4','#ba91e8','#ffc1dc'];
+ for(let row=0;row<18;row++){let width=12+Math.min(row,17-row)*4;for(let j=0;j<width;j++){let e=document.createElement('span');e.className='mini-blossom';e.textContent=Math.random()>.12?'♥':'♡';e.style.left=(50-width*1.5+j*3+Math.random()*1.5)+'%';e.style.top=(8+row*3.5+Math.random()*1.5)+'%';e.style.setProperty('--c',colors[Math.floor(Math.random()*colors.length)]);e.style.setProperty('--sz',(12+Math.random()*12)+'px');box.appendChild(e)}}
+}
+
+</script>
+</body>
+</html>
